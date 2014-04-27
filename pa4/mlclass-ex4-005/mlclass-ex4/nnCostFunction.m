@@ -62,23 +62,29 @@ Theta2_grad = zeros(size(Theta2));
 %               and Theta2_grad from Part 2.
 %
 
+% add 1 to each example
+X = [ones(m, 1) X];
 
+delta1 = zeros(size(Theta1,1),size(Theta1,2));
+delta2 = zeros(size(Theta2,1),size(Theta2,2));
 
+for i=1:m
+  outY = zeros(num_labels,1);
+  outY(y(i)) = 1;
+  a2 = [1 sigmoid(X(i,:)*Theta1')];
+  a3 = sigmoid(a2*Theta2');
+  J += (1.0/m)*sum(-outY'*log(a3') - (1 - outY')*log(1-a3'));
+  
+  %compute backpropagation
+  d3 = a3' - outY;
+  d2 = Theta2'*d3 .* (a2 .* (1-a2))';
+  delta1 += d2(2:end) * X(i,:);
+  delta2 += d3 * a2;
+endfor
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+J += lambda/(2*m)*(sum(sum(Theta1(:,2:end).^2)) + sum(sum(Theta2(:,2:end).^2)));
+Theta1_grad = (1.0/m)*delta1 + [zeros(size(Theta1,1),1) (lambda/m)*Theta1(:,2:end)];
+Theta2_grad = (1.0/m)*delta2 + [zeros(size(Theta2,1),1) (lambda/m)*Theta2(:,2:end)];
 
 % -------------------------------------------------------------
 
