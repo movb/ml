@@ -19,16 +19,11 @@ grad = zeros(size(theta));
 %               You should set J to the cost and grad to the gradient.
 %
 
+%fprintf("Sizes of X*theta: %i\n", size(X*theta))
+%fprintf("Sizes of y: %i\n", size(y))
 
-
-
-
-
-
-
-
-
-
+J = (1.0/(2*m))*sum((X*theta - y).^2) + lambda/(2*m)*sum(theta(2:end).^2);
+grad = 1.0/m*(X*theta - y)'*X + [0 lambda/m*theta(2:end,1)'];
 
 % =========================================================================
 
